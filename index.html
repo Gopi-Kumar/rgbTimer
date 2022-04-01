@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RGB Timer</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body,
+        body main {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: aqua;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        body .container {
+            width: 90vw;
+            max-width: 350px;
+            height: 200px;
+            background: black;
+            border-radius: 30px;
+            /* margin:calc(50vh - 100px) auto; */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 5px 5px 10px 10px rgba(20, 20, 20, 0.4);
+        }
+
+        body .container .current_time {
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        body .container .current_date {
+            color: aqua;
+            font-weight: bold;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        img {
+            width: 40px;
+            float: left;
+            margin: 5px;
+        }
+
+        body .container .year_progress {
+            width: 250px;
+            height: 27px;
+            margin: 5px 0px;
+            /* background: white; */
+            background: rgb(255,0,0);
+            border: 3px solid white;
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* body>div>section.year_progress>div {
+           background-color: red;
+        } */
+
+        body .controls {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+        }
+
+        body .controls button {
+            background-color: rgba(155, 155, 155, 0.4);
+        }
+
+        body .controls button img {
+            width: 25px;
+        }
+
+        video{
+            width:1px;
+            /* height:200px; */
+            position:fixed;
+            top:5px; right: 3px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <main>
+        <div class="controls">
+            <button onclick="fullScreen()"><img src="https://cdn-icons-png.flaticon.com/512/483/483333.png"
+                alt=""></button>
+            </div>
+            <div class="container">
+                <section class="current_date">01/02/2012</section>
+                <p class="current_time">00:00 zz</p>
+                <section class="year_progress">
+                        Day lefted in month
+                    <!-- <div class="progress">asdf</div> -->
+                </section>
+            </div>
+        </main>
+        <video src="brightness.mp4" controls loop muted autoplay></video>
+
+    <script>
+
+        let colors = ["red", "green", "blue", "yellow", "aqua"]
+        let current_time = document.querySelector(".current_time");
+        let current_date = document.querySelector(".current_date");
+
+
+        //chaning time after every second
+        setInterval(() => {
+            var date = new Date();
+            var hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+            var am_pm = date.getHours() >= 12 ? "PM" : "AM";
+            hours = hours < 10 ? "0" + hours : hours;
+            var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            time = hours + ":" + minutes + ":" + seconds + " " + am_pm;
+            current_time.innerText = time;
+            current_date.innerHTML = `<img src="https://icon-library.com/images/stopwatch-icon/stopwatch-icon-6.jpg" alt="">${date.toDateString()}`;
+
+            let dayLeft = new Date(date.getFullYear(), date.getMonth(), 0).getDate() - date.getDate() ;
+            let dayLeftPercent = (date.getDate() / 29) * 100;
+            let year_progress_container = document.querySelector(".year_progress");
+            year_progress_container.style.background = `linear-gradient(90deg, rgb(255,0,0) ${dayLeftPercent}%, rgba(255,255,255,1) 1%)`
+            year_progress_container.innerText = `${dayLeft} days left in this month`
+
+
+        }, 1000)
+
+        //Timer Full screen controls scripts
+        let isFullscreen = false;
+        function fullScreen() {
+            if(!isFullscreen){
+                document.body.requestFullscreen()
+                isFullscreen = true;
+            }else{
+                document.exitFullscreen()
+                isFullscreen = false
+            }
+        }
+        //Changing background color
+        setInterval(() => {
+            let i = Math.floor(Math.random() * 5)
+            document.getElementsByTagName("main")[0].style.backgroundColor = colors[i]
+        }, 500)
+
+
+
+
+    
+
+
+
+
+    </script>
+
+    <script src="index.js"></script>
+</body>
+
+</html>
